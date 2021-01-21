@@ -56,8 +56,8 @@ export default {
 <style scoped>
   .odom-wrap {
       padding: 0px;
-      padding-left: 5px;
-      padding-right: 5px;
+      padding-left: 10px;
+      padding-right: 0px;
       border: none;
       margin-top: 0.5rem;
   }

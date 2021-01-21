@@ -40,9 +40,12 @@
         <span>
           Navigation State: {{nav_status.nav_state_name}}<br>
           Waypoints Traveled: {{nav_status.completed_wps}}/{{nav_status.total_wps}}<br>
-          Radio Repeater Dropped: {{repeater_dropped}}
+          Radio Repeater Dropped: {{repeater_dropped}}<br>
+           
         </span>
-        <OdometryReading v-bind:odom="odom"/>
+        <span>
+         <OdometryReading v-bind:odom="odom"/>
+        </span>
         <div class="Joystick light-bg">
           <AutonJoystickReading v-bind:Joystick="Joystick"/>
         </div>
@@ -315,6 +318,10 @@ export default {
     height: 100%;
     width: 49.5%;
   }
+  
+  .col-wrap span{
+    margin:-30px 0px 0px 0px;
+  }
 
   .dragArea {
     height: 100%;
@@ -331,6 +338,10 @@ export default {
     min-height: min-content;
     overflow: auto;
     margin-bottom: 6px;
+  }
+    
+  .box span{
+    display:inline-block;
   }
 
   .box1 {

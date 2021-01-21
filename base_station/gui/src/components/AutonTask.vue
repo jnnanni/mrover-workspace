@@ -29,8 +29,10 @@
      </div>
      <div class="box light-bg">
         <br/>
-        <RawSensorData v-bind:GPS="GPS" v-bind:IMU="IMU"/>
-        <RadioSignalStrength/>
+        <RawSensorData v-bind:GPS="GPS" v-bind:IMU="IMU" v-bind:TargetList="TargetList" v-bind:Obstacle="Obstacle" v-bind:RadioSignalStrength="RadioSignalStrength"/>
+        <RadioSignalStrength v-bind:RadioSignalStrength="RadioSignalStrength"/>
+        <Obstacle v-bind:Obstacle="Obstacle"/>
+        <TargetList v-bind:TargetList="TargetList"/>
      </div>
 
     <!--div class="box2">
@@ -65,6 +67,8 @@ import WaypointEditor from './WaypointEditor_Auton.vue'
 // import AutonJoystickReading from './AutonJoystickReading.vue'
 import RawSensorData from './RawSensorData.vue'
 import LCMBridge from 'lcm_bridge_client/dist/bridge.js'
+import Obstacle from './Obstacle.vue'
+import TargetList from './TargetList.vue'
 
 let interval;
 
@@ -108,6 +112,17 @@ export default {
         bearing_deg: 0,
         speed: 0
       },
+     
+      Obstacle: {
+	      detected: false,
+	      bearing: 0,
+        distance: 0
+      },
+
+      TargetList: {
+        targetList: [{bearing: 0, distance: 0, id: 0},
+        {bearing: 0, distance: 0, id: 0}]
+      },
 
       Joystick: {
         forward_back: 0,
@@ -128,6 +143,10 @@ export default {
         mag_y: 0,
         mag_z: 0,
         bearing: 0
+      },
+      
+      RadioSignalStrength: {
+        signal_strength: '0'
       }
     }
   },
@@ -177,13 +196,17 @@ export default {
         } else if (msg.topic === '/imu') {
           this.IMU = msg.message
         } else if (msg.topic === '/radio') {
-          this.signal_strength = msg.signal_strength
+          this.RadioSignalStrength.signal_strength = msg.message.signal_strength.toFixed(1)
          }else if (msg.topic === '/autonomous') {
           this.Joystick = msg.message
         } else if (msg.topic === '/rr_drop_complete') {
           this.repeater_dropped = true
         } else if (msg.topic === '/kill_switch') {
           this.connections.motors = !msg.message.killed
+        } else if (msg.topic === '/obstacle') {
+          this.Obstacle = msg.message
+        } else if (msg.topic === '/target_list') {
+          this.TargetList = msg.message
         } else if (msg.topic === '/debugMessage') {
           if (msg['message']['isError']) {
             console.error(msg['message']['message'])
@@ -205,7 +228,10 @@ export default {
         {'topic': '/gps', 'type': 'GPS'},
         {'topic': '/imu', 'type': 'IMU'},
         {'topic': '/rr_drop_complete', 'type': 'RepeaterDropComplete'},
-        {'topic': '/debugMessage', 'type': 'DebugMessage'}
+        {'topic': '/debugMessage', 'type': 'DebugMessage'},
+        {'topic': '/obstacle', 'type': 'Obstacle'},
+        {'topic': '/radio', 'type': 'RadioSignalStrength'},
+        {'topic': '/target_list', 'type': 'TargetList'}
       ]
     )
 
@@ -261,7 +287,9 @@ export default {
     // AutonJoystickReading,
     RawSensorData,
     WaypointEditor,
-    RadioSignalStrength
+    RadioSignalStrength,
+    Obstacle,
+    TargetList
   }
 }
 </script>
