@@ -50,7 +50,7 @@
           <AutonJoystickReading v-bind:Joystick="Joystick"/>
         </div>
       </div>
-      <div class="box1">
+      <div class="box2">
         <h3>Current Course</h3>
         <draggable v-model="route" class="dragArea" draggable=".item'">
           <WaypointItem v-for="waypoint, i in route" :key="i" v-bind:waypoint="waypoint" v-bind:list="1" v-bind:index="i" v-bind:name="name" v-bind:id="id" v-on:delete="deleteItem($event)" v-on:toggleSearch="toggleSearch($event)" v-on:toggleGate="toggleGate($event)" v-on:add="addItem($event)"/>
@@ -313,8 +313,8 @@ export default {
   .col-wrap {
     position: absolute;
     margin: 1.5px;
-    display: flex;
-    flex-direction: column;
+    display: inline-block;
+    /*flex-direction: column; */
     height: 100%;
     width: 49.5%;
   }
@@ -349,7 +349,17 @@ export default {
     padding: 10px;
     border: 1px solid black;
     overflow: scroll;
-    /* min-height: min-content; */
+    min-height: min-content;
+    max-height: 80%;
+  }
+  
+  .box2 {
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid black;
+    overflow: scroll;
+    min-height: min-content;
+    max-height: 70%;
   }
 
   .wp-input p {
